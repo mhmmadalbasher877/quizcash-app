@@ -27,12 +27,13 @@ jobs:
       - name: Sync Capacitor iOS
         run: npx cap sync ios || true
 
-      - name: Build iOS App with xcodebuild
+      - name: Build iOS App Project
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace -scheme App -sdk iphoneos -configuration Release archive -archivePath build/App.xcarchive CODE_SIGNING_ALLOWED=NO
+          pod install || true
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -derivedDataPath build -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE_SPECIFIER=""
           mkdir -p build/Payload
-          cp -r build/App.xcarchive/Products/Applications/App.app build/Payload/
+          cp -r build/Build/Products/Release-iphoneos/App.app build/Payload/
           cd build
           zip -r QuizCash.ipa Payload
 
