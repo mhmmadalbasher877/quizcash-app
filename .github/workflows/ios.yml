@@ -21,11 +21,14 @@ jobs:
       - name: Build Web App
         run: npm run build || true
 
-      - name: Install Capacitor iOS Package
+      - name: Install Capacitor Packages
         run: npm install @capacitor/core @capacitor/cli @capacitor/ios --legacy-peer-deps
 
-      - name: Sync Capacitor iOS
-        run: npx cap sync ios || true
+      - name: Generate & Sync iOS Platform
+        run: |
+          rm -rf ios
+          npx cap add ios
+          npx cap sync ios
 
       - name: Build iOS App Project
         run: |
