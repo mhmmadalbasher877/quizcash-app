@@ -24,17 +24,16 @@ jobs:
       - name: Install Capacitor Packages
         run: npm install @capacitor/core @capacitor/cli @capacitor/ios --legacy-peer-deps
 
-      - name: Generate & Sync iOS Platform
+      - name: Force Re-create iOS Platform
         run: |
           rm -rf ios
           npx cap add ios
           npx cap sync ios
 
-      - name: Build iOS App Project
+      - name: Build iOS App Project with Xcode
         run: |
           cd ios/App
-          pod install || true
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -derivedDataPath build -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE_SPECIFIER=""
+          xcodebuild -project App.xcodeproj -scheme App -configuration Release -derivedDataPath build -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE_SPECIFIER=""
           mkdir -p build/Payload
           cp -r build/Build/Products/Release-iphoneos/App.app build/Payload/
           cd build
